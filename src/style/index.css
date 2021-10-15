@@ -1,0 +1,76 @@
+.window-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+
+    background-image: url("../image/window-image.png");
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    padding: 2.5rem;
+    flex-direction: column;
+}
+
+.window-body {
+    height: 100%;
+}
+
+.window-footer {
+    position: absolute;
+    bottom: 0;
+    width:100%;
+    height: 2.5rem;
+    background: #222;
+    display: flex;
+    align-items: center;
+}
+
+.bottom-container {
+    height: 2.5rem;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.start-button {
+    width: 2.5rem;
+    padding: 0.25rem;
+    background-image: url("../image/start-button.png");
+    border: 2px solid #222;
+    transition: 0.3s;
+
+}
+
+.start-button:hover {
+
+    border: 2px solid dodgerblue;
+    background: dodgerblue;
+    background-image: url("../image/start-button.png");
+    background-position: center;
+    background-size: cover;
+
+}
+
+.time-wrapper {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+
+    width: 120px;
+    color: white;
+
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    text-align: center;
+}
+
+.date {
+    font-size: 14px;
+}
+.time {
+    font-size: 14px;
+}
