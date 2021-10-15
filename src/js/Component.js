@@ -16,6 +16,11 @@ export default class Component {
 
     const fragment = document.createDocumentFragment();
 
+    if (this.element == null) {
+      this.$parentComponent = parent;
+      return;
+    }
+
     if (this.element?.length > 1) {
       this.element.forEach((element) => {
         fragment.appendChild(element);

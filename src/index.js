@@ -3,6 +3,7 @@ import DateTime from "./js/DateTime.js";
 import LinkFile from "./js/LinkFile.js";
 import Modal from "./js/Modal.js";
 
+
 class App {
   $windowBody = document.querySelector('.window-body');
   $selectedElement;
@@ -21,11 +22,14 @@ class App {
   init() {
     const notionLink = new LinkFile({title: '노션 이력서', image: './image/notion.png', link: 'https://tedev.notion.site/4d8b4384a4b343c8ad584b292f7f382b'})
 
-    const modal = new Modal({files: notionLink.getFile});
+    const resumeModal = new Modal({files: notionLink.getFile});
+    const webGameModal = new Modal({files: null});
 
-    const resumeDirectory = new Directory({title: '이력서', image: './image/empty-directory.svg', modal: modal.getContainer})
+    const resumeDirectory = new Directory({title: '이력서', image: './image/fill-directory.svg', modal: resumeModal.getContainer})
+    const webGameDirectory = new Directory({title: 'Web Game', image: './image/empty-directory.svg', modal: webGameModal.getContainer})
 
     this.$windowBody.appendChild(resumeDirectory.getDirectory);
+    this.$windowBody.appendChild(webGameDirectory.getDirectory);
 
     const githubLink = new LinkFile({title: 'Github', image: './image/github.svg', link: 'https://github.com/JJongTaeng'})
     this.$windowBody.appendChild(githubLink.getFile);
