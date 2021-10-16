@@ -11,14 +11,11 @@ export default class WindowElement {
   }
 
   offset = {
-    x: 0,
-    y: 0,
+    x: 0, y: 0,
   };
 
-
-
-  constructor({title, image, scale = { x: 1, y: 1 }}) {
-    this.scale = scale;
+  constructor({title, image, moveScale = { x: 1, y: 1 }}) {
+    this.moveScale = moveScale;
     this.$windowElementTitle.textContent = title;
     this.$windowElementImage.style.backgroundImage = `url('${image}')`;
 
@@ -29,22 +26,18 @@ export default class WindowElement {
 
   move() {
     const move = (e) => {
-      const { clientX, clientY } = e;
-      if((clientX < 40 || clientX > window.innerWidth - 40) || (clientY > window.innerHeight - 80 || clientY < 40)) {
+      if(this.checkRangeOfMotion(e.clientX, e.clientY)) {
         return;
       }
 
-      this.offset.x = clientX - this.initialMousePos.x;
-      this.offset.y = clientY - this.initialMousePos.y;
-
-      this.$container.style.transform = `translate3d(${this.offset.x / this.scale.x}px, ${this.offset.y / this.scale.x}px, 0)`
+      this.setMovingElementPosition(e.clientX, e.clientY);
+      this.setWindowElementPosition();
     }
 
 
     this.$container.addEventListener('mousedown', (e) => {
 
-      this.initialMousePos.x = e.clientX - this.offset.x;
-      this.initialMousePos.y = e.clientY - this.offset.y;
+      this.resetPosition(e.clientX, e.clientY);
 
       document.addEventListener('mousemove', move);
     })
@@ -54,5 +47,23 @@ export default class WindowElement {
       document.removeEventListener('mousemove', move);
     })
 
+  }
+
+  resetPosition(clientX, clientY) {
+    this.initialMousePos.x = clientX - this.offset.x;
+    this.initialMousePos.y = clientY - this.offset.y;
+  }
+
+  setMovingElementPosition(clientX, clientY) {
+    this.offset.x = clientX - this.initialMousePos.x;
+    this.offset.y = clientY - this.initialMousePos.y;
+  }
+
+  checkRangeOfMotion(clientX, clientY) {
+    return (clientX < 40 || clientX > window.innerWidth - 40) || (clientY > window.innerHeight - 80 || clientY < 40)
+  }
+
+  setWindowElementPosition() {
+    this.$container.style.transform = `translate3d(${this.offset.x / this.moveScale.x}px, ${this.offset.y / this.moveScale.x}px, 0)`
   }
 }

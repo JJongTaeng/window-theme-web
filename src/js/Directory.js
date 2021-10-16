@@ -4,14 +4,12 @@ import Component from "./Component.js";
 export default class Directory extends WindowElement {
   $directory;
   $directoryModal;
-  constructor({ title, image, modal }) {
-    super({title, image});
-
-    let component = new Component({element: [ this.$windowElementImage, this.$windowElementTitle ]});
-    component.render(this.$container);
+  constructor({ title, image, scale, modal }) {
+    super({title, image, scale});
     this.$directoryModal = modal.getModal;
-    this.$directory = component.getParentComponent
     this.modal = modal;
+
+    this.createDirectory();
     this.dblClick();
   }
 
@@ -20,6 +18,13 @@ export default class Directory extends WindowElement {
       this.modal.open({x: e.clientX, y: e.clientY})
     })
   }
+
+  createDirectory() {
+    let component = new Component({element: [ this.$windowElementImage, this.$windowElementTitle ]});
+    component.render(this.$container);
+    this.$directory = component.getParentComponent;
+  }
+
 
   get getComponent() {
     return this.$directory;

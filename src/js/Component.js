@@ -7,20 +7,23 @@ export default class Component {
 
   render(parent) {
 
-    switch (parent.nodeName) {
-      case 'IMG': case 'INPUT':
-        throw new Error('### element img, input is not parent elemenet!');
-        return;
-    }
+    this.checkNodeName(parent);
 
-    const fragment = document.createDocumentFragment();
+    this.$parentComponent = parent;
 
     if (this.element == null) {
-      this.$parentComponent = parent;
       return;
     }
 
-    if (this.element?.length > 0) {
+    this.attachChildrenToParent(parent);
+
+  }
+
+  attachChildrenToParent(parent) {
+
+    const fragment = document.createDocumentFragment();
+
+    if (this.element?.length) {
       this.element.forEach((element) => {
         fragment.appendChild(element);
       });
@@ -29,7 +32,13 @@ export default class Component {
     }
 
     parent.appendChild(fragment);
-    this.$parentComponent = parent;
+  }
+
+  checkNodeName(parent) {
+    switch (parent.nodeName) {
+      case 'IMG': case 'INPUT':
+        throw new Error('### element img, input is not parent elemenet!');
+    }
   }
 
   get getParentComponent() {

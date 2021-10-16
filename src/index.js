@@ -10,12 +10,8 @@ class App {
 
   constructor() {
     this.init();
-
-    setInterval(() => {
-      new DateTime({date: new Date()});
-    }, 1000)
-
-    new DateTime({date: new Date()});
+    this.setLiveTimeToSecond();
+    this.click()
 
   }
 
@@ -24,11 +20,11 @@ class App {
       scale: {x: 0.7, y: 0.7},
 
       createFiles() {
-        return [new LinkFile({title: '노션 이력서', image: './image/notion.png', link: 'https://tedev.notion.site/4d8b4384a4b343c8ad584b292f7f382b', scale: this.scale})]
+        return [new LinkFile({title: '노션 이력서', image: './image/notion.png', link: 'https://tedev.notion.site/4d8b4384a4b343c8ad584b292f7f382b', moveScale: this.scale})]
       },
 
       createModal() {
-        return new Modal({files: this.createFiles().map(element => element.getComponent), scale: this.scale})
+        return new Modal({files: this.createFiles().map(element => element.getComponent), sizeScale: this.scale})
       }
     }
 
@@ -52,7 +48,6 @@ class App {
     this.$windowBody.appendChild(tistoryLink.getComponent);
 
 
-    this.click()
   }
 
   click() {
@@ -84,6 +79,14 @@ class App {
       this.$selectedElement = element;
 
     }))
+  }
+
+  setLiveTimeToSecond() {
+    new DateTime({date: new Date()});
+
+    setInterval(() => {
+      new DateTime({date: new Date()});
+    }, 1000)
   }
 }
 

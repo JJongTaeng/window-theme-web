@@ -17,43 +17,28 @@ export default class Modal {
   $maximizeButton = Component.createElement({ type: 'div', className: 'modal-maximize-button' });
   $maximizeButtonContent = Component.createElement({ type: 'div', className: 'maximize-button-content' });
 
-  view = false;
+  containerIsMaximize = false;
 
-  constructor({ files, scale = {x: 1, y: 1} }) {
+  constructor({ files, sizeScale = {x: 1, y: 1} }) {
     this.files = files;
-    this.scale = scale;
-    this.init();
+    this.sizeScale = sizeScale;
+
+    this.createModalController();
+    this.attachChildToParent();
+
     this.linkFiles();
-
-
     this.click();
 
     document.body.appendChild(this.$modalContainer)
 
   }
 
-  init() {
-    let unit = ['__', '☐', 'X'];
-    let children = [this.$minimizeButtonContent, this.$maximizeButtonContent, this.$closeButtonContent];
-    [this.$minimizeButton, this.$maximizeButton, this.$closeButton].forEach((element, index) => {
-      children[index].textContent = unit[index];
-      element.appendChild(children[index]);
-      element.classList.add('modal-button');
-      this.$modalButtonWrapper.appendChild(element);
-    })
-
-    this.$modalHeader.appendChild(this.$modalButtonWrapper);
-
-    this.$modalContainer.appendChild(this.$modalHeader);
-    this.$modalContainer.appendChild(this.$modalBody);
-
-  }
 
   click() {
     this.$modalContainer.addEventListener('click', (e) => {
       let element = e.target;
 
-      while(!element.classList.contains('modal-close-button')) {
+      while(!element.classList.contains('modal-button')) {
         element = element.parentNode;
         if (element.nodeName === 'BODY') {
           element = null;
@@ -61,8 +46,34 @@ export default class Modal {
         }
       }
 
-      this.$modalContainer.style.transform = `scale(0, 0)`
+      if(element.classList.contains('modal-close-button')) {
+        this.resizeModalContainer(0, 0);
+      } else if(element.classList.contains('modal-minimize-button')) {
+
+      } else if (element.classList.contains('modal-maximize-button')) {
+
+        this.containerIsMaximize ?  this.resizeModalContainer(this.sizeScale.x, this.sizeScale.y) :  this.resizeModalContainer(1, 1);
+        this.containerIsMaximize = !this.containerIsMaximize;
+      }
+
     })
+  }
+
+
+
+  resizeModalContainer(x, y) {
+    this.$modalContainer.style.transform = `scale(${x}, ${y})`
+  }
+
+  open(origin) {
+    this.$modalContainer.style.transformOrigin = `${origin.x}px ${origin.y}px`
+    setTimeout(() => {
+      this.$modalContainer.style.transform = `scale(${this.sizeScale.x}, ${this.sizeScale.y})`;
+    }, 200)
+
+  }
+
+  style() {
   }
 
   linkFiles() {
@@ -73,15 +84,22 @@ export default class Modal {
 
   }
 
-  open(origin) {
-    this.$modalContainer.style.transformOrigin = `${origin.x}px ${origin.y}px`
-    setTimeout(() => {
-      this.$modalContainer.style.transform = `scale(${this.scale.x}, ${this.scale.y})`;
-    }, 200)
+  createModalController() {
+    let unit = ['__', '☐', 'X'];
+    let buttonContentList = [this.$minimizeButtonContent, this.$maximizeButtonContent, this.$closeButtonContent];
+    [this.$minimizeButton, this.$maximizeButton, this.$closeButton].forEach((element, index) => {
+      buttonContentList[index].textContent = unit[index];
+      element.appendChild(buttonContentList[index]);
+      element.classList.add('modal-button');
+      this.$modalButtonWrapper.appendChild(element);
+    })
 
   }
 
-  style() {
+  attachChildToParent() {
+    this.$modalHeader.appendChild(this.$modalButtonWrapper);
+    this.$modalContainer.appendChild(this.$modalHeader);
+    this.$modalContainer.appendChild(this.$modalBody);
   }
 
   get getModal() {
