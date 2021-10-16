@@ -26,12 +26,12 @@ module.exports = {
     new HtmlWebpackPlugin({
       template: './src/index.html',
       minify: {
-        // collapseWhitespace: true,
+        collapseWhitespace: true,
         removeComments: true,
         hash: true
       }
     }),
-    new CleanWebpackPlugin(),
+    // new CleanWebpackPlugin(),
   ],
   devtool: 'source-map',
   mode: 'development',

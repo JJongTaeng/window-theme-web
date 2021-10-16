@@ -1,4 +1,6 @@
-
+body {
+    overflow: hidden;
+}
 .window-background {
     position: absolute;
     top: 0;
@@ -11,8 +13,9 @@
     background-size: cover;
     background-position: center;
     display: flex;
-    padding: 2.5rem;
     flex-direction: column;
+    overflow: hidden;
+
 }
 
 .window-body {

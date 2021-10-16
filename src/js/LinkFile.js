@@ -5,8 +5,8 @@ export default class LinkFile extends WindowElement {
 
   $file;
 
-  constructor({ title, image, link }) {
-    super({ title, image });
+  constructor({ title, image, link, scale }) {
+    super({ title, image, scale });
 
     this.link = link;
 
@@ -20,12 +20,11 @@ export default class LinkFile extends WindowElement {
 
   dbClick() {
     this.$file.addEventListener('dblclick', () => {
-      console.log(123);
       window.open(this.link);
     })
   }
 
-  get getFile() {
+  get getComponent() {
     return this.$file;
   }
 }

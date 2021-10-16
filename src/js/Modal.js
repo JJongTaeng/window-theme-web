@@ -19,9 +19,9 @@ export default class Modal {
 
   view = false;
 
-  constructor({ files }) {
+  constructor({ files, scale = {x: 1, y: 1} }) {
     this.files = files;
-
+    this.scale = scale;
     this.init();
     this.linkFiles();
 
@@ -73,10 +73,18 @@ export default class Modal {
 
   }
 
+  open(origin) {
+    this.$modalContainer.style.transformOrigin = `${origin.x}px ${origin.y}px`
+    setTimeout(() => {
+      this.$modalContainer.style.transform = `scale(${this.scale.x}, ${this.scale.y})`;
+    }, 200)
+
+  }
+
   style() {
   }
 
-  get getContainer() {
+  get getModal() {
     return this.$modalContainer;
   }
 

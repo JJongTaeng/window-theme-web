@@ -17,7 +17,8 @@ export default class WindowElement {
 
 
 
-  constructor({title, image}) {
+  constructor({title, image, scale = { x: 1, y: 1 }}) {
+    this.scale = scale;
     this.$windowElementTitle.textContent = title;
     this.$windowElementImage.style.backgroundImage = `url('${image}')`;
 
@@ -36,11 +37,12 @@ export default class WindowElement {
       this.offset.x = clientX - this.initialMousePos.x;
       this.offset.y = clientY - this.initialMousePos.y;
 
-
-      this.$container.style.transform = `translate3d(${this.offset.x}px, ${this.offset.y}px, 0)`
+      this.$container.style.transform = `translate3d(${this.offset.x / this.scale.x}px, ${this.offset.y / this.scale.x}px, 0)`
     }
 
+
     this.$container.addEventListener('mousedown', (e) => {
+
       this.initialMousePos.x = e.clientX - this.offset.x;
       this.initialMousePos.y = e.clientY - this.offset.y;
 

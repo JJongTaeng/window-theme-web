@@ -20,22 +20,36 @@ class App {
   }
 
   init() {
-    const notionLink = new LinkFile({title: '노션 이력서', image: './image/notion.png', link: 'https://tedev.notion.site/4d8b4384a4b343c8ad584b292f7f382b'})
+    const resume = {
+      scale: {x: 0.7, y: 0.7},
 
-    const resumeModal = new Modal({files: notionLink.getFile});
-    const webGameModal = new Modal({files: null});
+      createFiles() {
+        return [new LinkFile({title: '노션 이력서', image: './image/notion.png', link: 'https://tedev.notion.site/4d8b4384a4b343c8ad584b292f7f382b', scale: this.scale})]
+      },
 
-    const resumeDirectory = new Directory({title: '이력서', image: './image/fill-directory.svg', modal: resumeModal.getContainer})
-    const webGameDirectory = new Directory({title: 'Web Game', image: './image/empty-directory.svg', modal: webGameModal.getContainer})
+      createModal() {
+        return new Modal({files: this.createFiles().map(element => element.getComponent), scale: this.scale})
+      }
+    }
 
-    this.$windowBody.appendChild(resumeDirectory.getDirectory);
-    this.$windowBody.appendChild(webGameDirectory.getDirectory);
+    const webGame = {
+      files: null,
+      createModal() {
+        return new Modal({files: null});
+      }
+    }
+
+    const resumeDirectory = new Directory({title: '이력서', image: './image/fill-directory.svg', modal: resume.createModal()})
+    const webGameDirectory = new Directory({title: 'Web Game', image: './image/empty-directory.svg', modal: webGame.createModal()})
+
+    this.$windowBody.appendChild(resumeDirectory.getComponent);
+    this.$windowBody.appendChild(webGameDirectory.getComponent);
 
     const githubLink = new LinkFile({title: 'Github', image: './image/github.svg', link: 'https://github.com/JJongTaeng'})
-    this.$windowBody.appendChild(githubLink.getFile);
+    this.$windowBody.appendChild(githubLink.getComponent);
 
     const tistoryLink = new LinkFile({title: 'Blog', image: './image/tistory.svg', link: 'https://jointae.tistory.com'})
-    this.$windowBody.appendChild(tistoryLink.getFile);
+    this.$windowBody.appendChild(tistoryLink.getComponent);
 
 
     this.click()

@@ -2,7 +2,6 @@ export default class Component {
 
   constructor({ element }) {
     this.element = element;
-    console.log(element);
     this.$parentComponent;
   }
 
@@ -21,7 +20,7 @@ export default class Component {
       return;
     }
 
-    if (this.element?.length > 1) {
+    if (this.element?.length > 0) {
       this.element.forEach((element) => {
         fragment.appendChild(element);
       });
