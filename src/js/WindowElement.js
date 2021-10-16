@@ -5,7 +5,7 @@ export default class WindowElement {
   $container = Component.createElement({ type: 'div', className: 'window-element-container' });
   $windowElementImage = Component.createElement({ type: 'div', className: 'window-element-image' });
   $windowElementTitle = Component.createElement({ type: 'div', className: 'window-element-title' });
-
+  $selectedElement;
   initialMousePos = {
     x: 0, y: 0
   }
@@ -19,10 +19,56 @@ export default class WindowElement {
     this.$windowElementTitle.textContent = title;
     this.$windowElementImage.style.backgroundImage = `url('${image}')`;
 
+    this.createWindowElement();
+
     this.move();
+    this.findParentNode();
 
   }
 
+  findParentNode() {
+    this.$container.addEventListener('click', (e) => {
+      let element = e.target;
+
+      while(!element.classList.contains('window-element-container')) {
+        element = element.parentNode;
+
+        if (element.nodeName === 'BODY') {
+          element = null;
+          return;
+        }
+      }
+
+      this.$parentNode = element.parentNode ? element.parentNode : null;
+      this.focusElement();
+    })
+  }
+
+  focusElement() {
+    this.$parentNode.addEventListener('click', (e) => {
+      let element = e.target;
+
+      if (e.target === this.$parentNode) {
+        this.removeBorderedChildren()
+      }
+
+      while(!element.classList.contains('window-element-container')) {
+        element = element.parentNode;
+
+        if (element.nodeName === 'BODY') {
+          element = null;
+          return;
+        }
+      }
+
+      if (this.$selectedElement) {
+        this.$selectedElement.classList.remove('bordered');
+      }
+
+      element.classList.add('bordered');
+      this.$selectedElement = element;
+    })
+  }
 
   move() {
     const move = (e) => {
@@ -47,6 +93,15 @@ export default class WindowElement {
       document.removeEventListener('mousemove', move);
     })
 
+  }
+
+  removeBorderedChildren() {
+    [...this.$parentNode.children].forEach(element => element.classList.remove('bordered'))
+  }
+
+  createWindowElement() {
+    let component = new Component({ element: [this.$windowElementImage, this.$windowElementTitle] });
+    component.render(this.$container);
   }
 
   resetPosition(clientX, clientY) {

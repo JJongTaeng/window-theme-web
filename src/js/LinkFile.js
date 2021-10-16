@@ -8,9 +8,10 @@ export default class LinkFile extends WindowElement {
   constructor({ title, image, link, moveScale }) {
     super({ title, image, moveScale });
     this.link = link;
+    this.$file = this.$container;
 
-    this.createLinkFile();
     this.dbClick();
+
   }
 
   dbClick() {
@@ -19,14 +20,7 @@ export default class LinkFile extends WindowElement {
     })
   }
 
-  createLinkFile() {
-    let component = new Component({ element: [this.$windowElementImage, this.$windowElementTitle] });
-    component.render(this.$container);
-    this.$file = component.getParentComponent
-  }
-
   get getComponent() {
     return this.$file;
   }
-
 }

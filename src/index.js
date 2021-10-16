@@ -9,34 +9,32 @@ class App {
   $selectedElement;
 
   constructor() {
-    this.init();
-    this.setLiveTimeToSecond();
-    this.click()
-
-  }
-
-  init() {
-    const resume = {
+    this.resume = {
       scale: {x: 0.7, y: 0.7},
-
       createFiles() {
         return [new LinkFile({title: '노션 이력서', image: './image/notion.png', link: 'https://tedev.notion.site/4d8b4384a4b343c8ad584b292f7f382b', moveScale: this.scale})]
       },
-
       createModal() {
         return new Modal({files: this.createFiles().map(element => element.getComponent), sizeScale: this.scale})
       }
     }
 
-    const webGame = {
+    this.webGame = {
+      scale: {x: 0.7, y: 0.7},
       files: null,
       createModal() {
-        return new Modal({files: null});
+        return new Modal({files: null, sizeScale: this.scale});
       }
     }
 
-    const resumeDirectory = new Directory({title: '이력서', image: './image/fill-directory.svg', modal: resume.createModal()})
-    const webGameDirectory = new Directory({title: 'Web Game', image: './image/empty-directory.svg', modal: webGame.createModal()})
+    this.init();
+    this.setLiveTimeToSecond();
+  }
+
+  init() {
+
+    const resumeDirectory = new Directory({title: '이력서', image: './image/fill-directory.svg', modal: this.resume.createModal()})
+    const webGameDirectory = new Directory({title: 'Web Game', image: './image/empty-directory.svg', modal: this.webGame.createModal()})
 
     this.$windowBody.appendChild(resumeDirectory.getComponent);
     this.$windowBody.appendChild(webGameDirectory.getComponent);
@@ -50,37 +48,6 @@ class App {
 
   }
 
-  click() {
-    this.$windowBody.addEventListener('click', ((event) => {
-      let element = event.target;
-
-      if (element.classList.contains('window-body')) {
-        const childList = [...this.$windowBody.children];
-
-        childList.forEach((element) => {
-          element.classList.remove('bordered')
-        })
-      }
-
-      while(!element.classList.contains('window-element-container')) {
-        element = element.parentNode;
-
-        if (element.nodeName === 'BODY') {
-          element = null;
-          return;
-        }
-      }
-
-      if (this.$selectedElement) {
-        this.$selectedElement.classList.remove('bordered')
-      }
-
-      element.classList.add('bordered');
-      this.$selectedElement = element;
-
-    }))
-  }
-
   setLiveTimeToSecond() {
     new DateTime({date: new Date()});
 
@@ -88,6 +55,7 @@ class App {
       new DateTime({date: new Date()});
     }, 1000)
   }
+
 }
 
 new App();
