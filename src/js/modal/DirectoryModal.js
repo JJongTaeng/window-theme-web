@@ -24,11 +24,11 @@ export default class DirectoryModal {
 
   $minimizedElementItem
 
-  constructor({ files, sizeScale = { x: 1, y: 1 } }) {
+  constructor({ files, sizeScale = { x: 1, y: 1 }, createContextMenu = false }) {
     this.files = files;
     this.sizeScale = sizeScale;
     this.containerIsMaximize = true;
-
+    this.contextMenu = createContextMenu && new ContextMenu({directory: this});
     this.initalMousePos = {
       x: 0, y: 0
     }
@@ -47,6 +47,9 @@ export default class DirectoryModal {
 
   }
 
+  createContextMenu() {
+    this.contextMenu = new ContextMenu({directory: this});
+  }
 
   buttonClick() {
     this.$modalContainer.addEventListener('click', (e) => {
@@ -192,8 +195,7 @@ export default class DirectoryModal {
     this.$modalContainer.addEventListener('contextmenu', (e) => {
       e.preventDefault();
 
-      const contextMenu = new ContextMenu({directory: this});
-      contextMenu.open(e.clientX, e.clientY);
+      this.contextMenu.open(e.clientX, e.clientY);
     })
   }
 

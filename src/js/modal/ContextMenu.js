@@ -8,8 +8,6 @@ export default class ContextMenu {
   $inputContainer = document.querySelector('.input-container');
   $inputTitle = document.querySelector('.input-title');
   $inputContent = document.querySelector('.input-content');
-  $submitButton = document.querySelector('.submit-button');
-  $cancelButton = document.querySelector('.cancel-button');
   title;
   content;
 
@@ -25,6 +23,7 @@ export default class ContextMenu {
       const element = e.target;
       switch (element.className) {
         case 'submit-button':
+          console.log(this.title, this.content);
           request.post(url, { title: this.title, content: this.content }).then(() => {
             this.$inputContainer.style.transform = `scale(0, 0)`;
             this.$inputTitle.value = null;

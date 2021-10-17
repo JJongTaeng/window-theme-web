@@ -58,7 +58,8 @@ class App {
       async createDirectoryModal() {
         return new DirectoryModal({
           files: (await this.createFiles()).map(element => element.getComponent),
-          sizeScale: this.scale
+          sizeScale: this.scale,
+          createContextMenu: true,
         });
       },
       async fetch() {
@@ -135,6 +136,7 @@ class App {
       document.querySelector('.closing-page-text').textContent = "시스템 종료 중..."
 
       setTimeout(() => {
+        self.opener = self;
         window.close();
       }, 1000)
     })
