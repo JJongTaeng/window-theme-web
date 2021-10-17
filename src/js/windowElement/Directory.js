@@ -1,4 +1,4 @@
-import Component from "./Component.js";
+import Component from "../Component.js";
 import AddedElementBottom from "./AddedBottomElement.js";
 
 export default class Directory extends AddedElementBottom {

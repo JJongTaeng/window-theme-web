@@ -1,4 +1,4 @@
-import Component from "./Component.js";
+import Component from "../Component.js";
 
 export default class WindowElement {
 
@@ -71,13 +71,14 @@ export default class WindowElement {
   }
 
   move() {
-    const move = (e) => {
+    const moveHandler = (e) => {
+
       if(this.checkRangeOfMotion(e.clientX, e.clientY)) {
         return;
       }
 
       this.setMovingElementPosition(e.clientX, e.clientY);
-      this.setWindowElementPosition();
+      this.changeWindowElementPosition();
     }
 
 
@@ -85,12 +86,12 @@ export default class WindowElement {
 
       this.resetPosition(e.clientX, e.clientY);
 
-      document.addEventListener('mousemove', move);
+      document.addEventListener('mousemove', moveHandler);
     })
 
 
     document.addEventListener('mouseup', () => {
-      document.removeEventListener('mousemove', move);
+      document.removeEventListener('mousemove', moveHandler);
     })
 
   }
@@ -115,10 +116,10 @@ export default class WindowElement {
   }
 
   checkRangeOfMotion(clientX, clientY) {
-    return (clientX < 40 || clientX > window.innerWidth - 40) || (clientY > window.innerHeight - 80 || clientY < 40)
+    return (clientX < 40 || clientX > this.$container.parentNode.clientWidth - 40) || (clientY > this.$container.parentNode.clientHeight - 80 || clientY < 40)
   }
 
-  setWindowElementPosition() {
-    this.$container.style.transform = `translate3d(${this.offset.x / this.moveScale.x}px, ${this.offset.y / this.moveScale.x}px, 0)`
+  changeWindowElementPosition() {
+    this.$container.style.transform = `translate3d(${this.offset.x / this.moveScale.x}px, ${this.offset.y / this.moveScale.y}px, 0)`
   }
 }

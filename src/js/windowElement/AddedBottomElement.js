@@ -1,5 +1,5 @@
 import WindowElement from "./WindowElement.js";
-import Component from "./Component.js";
+import Component from "../Component.js";
 
 export default class AddedBottomElement extends WindowElement{
 

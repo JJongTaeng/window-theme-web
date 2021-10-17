@@ -1,6 +1,11 @@
-import Component from "./Component.js";
+import Component from "../Component.js";
+import ContextMenu from "./ContextMenu.js";
+import { request } from "../request.js";
+import GuestBookFile from "../windowElement/GuestBookFile.js";
+import ContentModal from "./ContentModal.js";
+import { url } from "../config.js";
 
-export default class Modal {
+export default class DirectoryModal {
 
   $modalContainer = Component.createElement({ type: 'div', className: 'modal-container' });
   $modalHeader = Component.createElement({ type: 'div', className: 'modal-header' })
@@ -19,17 +24,25 @@ export default class Modal {
 
   $minimizedElementItem
 
-  containerIsMaximize = true;
-  isMinimized = false;
   constructor({ files, sizeScale = { x: 1, y: 1 } }) {
     this.files = files;
     this.sizeScale = sizeScale;
+    this.containerIsMaximize = true;
+
+    this.initalMousePos = {
+      x: 0, y: 0
+    }
+    this.offset = {
+      x: 0, y: 0
+    }
 
     this.createModalController();
     this.attachChildToParent();
 
     this.linkFiles();
     this.buttonClick();
+    this.modalMove()
+    this.newFile();
     document.body.appendChild(this.$modalContainer)
 
   }
@@ -51,7 +64,12 @@ export default class Modal {
         this.resizeModalContainer(0, 0);
         this.removeMinimizedElementItem();
       } else if (element.classList.contains('modal-minimize-button')) {
-        this.changeTransformOrigin();
+
+        const { offsetLeft } = this.$minimizedElementItem;
+        const { offsetTop } = this.$minimizedElementItem.offsetParent;
+
+        this.changeTransformOrigin(offsetLeft, offsetTop);
+
         this.resizeModalContainer(0, 0);
         this.isMinimized = true;
       } else if (element.classList.contains('modal-maximize-button')) {
@@ -64,6 +82,31 @@ export default class Modal {
       }
 
     })
+  }
+
+  modalMove() {
+    const moveHandler = (e) => {
+      this.offset.x = e.clientX - this.initalMousePos.x;
+      this.offset.y = e.clientY - this.initalMousePos.y;
+
+      this.$modalContainer.style.transform = `translate3d(${this.offset.x}px, ${this.offset.y}px, 0) scale(${this.sizeScale.x}, ${this.sizeScale.y})`
+    }
+
+    this.$modalHeader.addEventListener('mousedown', (e) => {
+
+      if (e.target.classList.contains('modal-header')) {
+        this.initalMousePos = {
+          x: e.clientX - this.offset.x,
+          y: e.clientY - this.offset.y,
+        }
+
+        document.addEventListener('mousemove', moveHandler);
+      }
+    })
+
+    document.addEventListener('mouseup', () => {
+      document.removeEventListener('mousemove', moveHandler)
+    });
   }
 
   reduceSize() {
@@ -84,15 +127,7 @@ export default class Modal {
 
   minimizedElementClick() {
     this.$minimizedElementItem.addEventListener('click', () => {
-      // if(!this.isMinimized) {
-        this.resizeModalContainer(this.sizeScale.x, this.sizeScale.y);
-        // this.isMinimized = true;
-      // } else {
-      //   this.changeTransformOrigin();
-      //   this.resizeModalContainer(0, 0);
-      //   this.isMinimized = false;
-      // }
-
+      this.resizeModalContainer(this.sizeScale.x, this.sizeScale.y);
     })
   }
 
@@ -102,14 +137,12 @@ export default class Modal {
     }, 200)
   }
 
-  changeTransformOrigin() {
-    const { offsetLeft } = this.$minimizedElementItem;
-    const { offsetTop } = this.$minimizedElementItem.offsetParent;
-    this.$modalContainer.style.transformOrigin = `${offsetLeft}px ${offsetTop}px`
+  changeTransformOrigin(x, y) {
+    this.$modalContainer.style.transformOrigin = `${x}px ${y}px`
   }
 
   open(origin) {
-    this.$modalContainer.style.transformOrigin = `${origin.x}px ${origin.y}px`
+    this.changeTransformOrigin(origin.x, origin.y)
     setTimeout(() => {
       this.$modalContainer.style.transform = `scale(${this.sizeScale.x}, ${this.sizeScale.y})`;
     }, 200)
@@ -122,10 +155,11 @@ export default class Modal {
   linkFiles() {
 
     const component = new Component({ element: this.files });
-
     component.render(this.$modalBody);
 
   }
+
+
 
   createModalController() {
     let unit = ['__', '☐', 'X'];
@@ -152,6 +186,34 @@ export default class Modal {
 
   removeMinimizedElementItem() {
     document.querySelector('.minimized-element-list').removeChild(this.$minimizedElementItem);
+  }
+
+  newFile() {
+    this.$modalContainer.addEventListener('contextmenu', (e) => {
+      e.preventDefault();
+
+      const contextMenu = new ContextMenu({directory: this});
+      contextMenu.open(e.clientX, e.clientY);
+    })
+  }
+
+  async reRender() {
+    const response = await request.get(url)
+    const data = await response.json();
+
+    this.files = data.map(value => {
+      const contentModal = new ContentModal({content: value.content});
+      return new GuestBookFile({
+
+        title: value?.title,
+        image: './image/text.svg',
+        moveScale: this.sizeScale,
+        contentModal
+      })
+    })
+    const component = new Component({ element: this.files.map(element => element.getComponent) });
+    this.$modalBody.innerHTML = null;
+    component.render(this.$modalBody);
   }
 
   get getModal() {

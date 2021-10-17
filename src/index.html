@@ -9,8 +9,12 @@
     <link rel="stylesheet" href="style/reset.css">
     <link rel="stylesheet" href="style/window-element.css">
     <link rel="stylesheet" href="style/modal.css">
+    <link rel="stylesheet" href="style/context-menu.css">
 </head>
 <body>
+<div class="window-closing-page">
+    <span class="closing-page-text">시스템 종료 중...</span>
+</div>
 <div class="window-background">
     <div class="window-header"></div>
     <div class="window-body">
@@ -18,6 +22,10 @@
     </div>
 </div>
 <div class="window-footer">
+    <div class="start-button-popup">
+        <span class="system-close-emoji">⎋</span>
+        <span class="system-close-button">시스템 종료</span>
+    </div>
     <div class="bottom-container start-button"></div>
     <div class="minimized-element-list">
 
@@ -27,7 +35,17 @@
         <span class="time"></span>
         <span class="date"></span>
     </div>
-    <script src="index.js" type="module"></script>
 </div>
+<div class="context-menu-container">
+    <div class="context-menu-content">새 파일 생성</div>
+</div>
+<div class="input-container">
+    <div>제목: <input class="input-title" type="text"></div>
+    <div>내용: <input class="input-content" type="text"></div>
+    <button class="submit-button">전송</button>
+    <button class="cancel-button">취소</button>
+</div>
+<script src="index.js" type="module"></script>
+
 </body>
 </html>

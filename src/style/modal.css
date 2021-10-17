@@ -26,6 +26,7 @@
 .modal-body {
     width: 100%;
     height: calc(100% - 20px);
+    padding: 2rem;
 }
 .modal-button-wrapper{
     margin-left: auto;
@@ -66,4 +67,42 @@
 }
 .maximize-button-content {
 
+}
+
+
+/*content - modal*/
+.content-modal-container {
+    transform: scale(0, 0);
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.5);
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: -1000;
+}
+
+.content-modal-container.opened {
+    z-index: 200;
+    transform: scale(1, 1);
+}
+
+.content-modal-wrapper {
+    min-width: 300px;
+    min-height: 400px;
+    width: 50vw;
+    height: 50vh;
+
+    border-radius: 8px;
+    background: white;
+
+    padding: 2rem;
+}
+
+.content-modal-text {
+    color: black;
 }
