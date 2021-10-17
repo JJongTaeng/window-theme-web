@@ -211,6 +211,7 @@ export default class DirectoryModal {
         contentModal
       })
     })
+
     const component = new Component({ element: this.files.map(element => element.getComponent) });
     this.$modalBody.innerHTML = null;
     component.render(this.$modalBody);

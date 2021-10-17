@@ -5,6 +5,7 @@ import DirectoryModal from "./js/modal/DirectoryModal.js";
 import { request } from "./js/request.js";
 import GuestBookFile from "./js/windowElement/GuestBookFile.js";
 import ContentModal from "./js/modal/ContentModal.js";
+import { url } from "./js/config.js";
 
 
 class App {
@@ -61,7 +62,7 @@ class App {
         });
       },
       async fetch() {
-        const response = await request.get('http://localhost:3030/api/post')
+        const response = await request.get(url)
         return await response.json();
       },
     }
@@ -131,6 +132,7 @@ class App {
     const closingPage = document.querySelector('.window-closing-page');
     systemCloseButton.addEventListener('click', () => {
       closingPage.style.zIndex = 100;
+      document.querySelector('.closing-page-text').textContent = "시스템 종료 중..."
 
       setTimeout(() => {
         window.close();

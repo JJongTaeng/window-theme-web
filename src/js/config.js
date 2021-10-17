@@ -1,1 +1,1 @@
-export const url = 'https://intae.xyz';
+export const url = 'https://intae.xyz/api/post';

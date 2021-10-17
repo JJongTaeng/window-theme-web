@@ -25,9 +25,14 @@ export default class ContextMenu {
       const element = e.target;
       switch (element.className) {
         case 'submit-button':
-          request.post(url, { title: this.title, content: this.content })
-          this.$inputContainer.style.transform = `scale(0, 0)`;
-          this.directory.reRender();
+          request.post(url, { title: this.title, content: this.content }).then(() => {
+            this.$inputContainer.style.transform = `scale(0, 0)`;
+            this.$inputTitle.value = null;
+            this.$inputContent.value = null;
+            this.title = null;
+            this.content = null;
+            this.directory.reRender();
+          })
           break;
         case 'cancel-button':
           this.$inputContainer.style.transform = `scale(0, 0)`;
