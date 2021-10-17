@@ -39,6 +39,9 @@ body {
 
 .window-body {
     height: 100%;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
 }
 
 .window-footer {
