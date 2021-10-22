@@ -6,6 +6,7 @@ import { request } from "./js/request.js";
 import GuestBookFile from "./js/windowElement/GuestBookFile.js";
 import ContentModal from "./js/modal/ContentModal.js";
 import { url } from "./js/config.js";
+import WindowElementWC from "./js/windowElement/WindowElementWC.js";
 
 
 class App {
@@ -145,3 +146,4 @@ class App {
 }
 
 new App();
+
