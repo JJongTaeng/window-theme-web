@@ -1,1 +1,0 @@
-export const url = 'https://intae.xyz/api/post';
